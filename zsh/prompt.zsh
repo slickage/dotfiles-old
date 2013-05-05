@@ -47,31 +47,16 @@ need_push () {
   fi
 }
 
-rb_prompt(){
-  if (( $+commands[rbenv] ))
-  then
-	  echo "%{$fg_bold[yellow]%}$(rbenv version | awk '{print $1}')%{$reset_color%}"
-	else
-	  echo ""
-  fi
+py_prompt() {
+  [ $VIRTUAL_ENV ] && echo "%{$fg[cyan]%}py:%{$reset_color%}%{$fg_bold[cyan]%}$(basename $VIRTUAL_ENV)%{$reset_color%}%{$fg[cyan]%}/%{$reset_color%}"
 }
 
-# This keeps the number of todos always available the right hand side of my
-# command line. I filter it to only count those tagged as "+next", so it's more
-# of a motivation to clear out the list.
-todo(){
-  if (( $+commands[todo.sh] ))
+rb_prompt() {
+  if (( $+commands[rbenv] ))
   then
-    num=$(echo $(todo.sh ls +next | wc -l))
-    let todos=num-2
-    if [ $todos != 0 ]
-    then
-      echo "$todos"
-    else
-      echo ""
-    fi
-  else
-    echo ""
+    echo "%{$fg[red]%}rb:%{$reset_color%}%{$fg_bold[red]%}$(rbenv gemset active | awk '{print $1}')@$(rbenv version | awk '{print $1}')%{$reset_color%}%{$fg[red]%}/%{$reset_color%}"
+	else
+	  echo ""
   fi
 }
 
@@ -79,9 +64,9 @@ directory_name(){
   echo "%{$fg_bold[cyan]%}%1/%\/%{$reset_color%}"
 }
 
-export PROMPT=$'\n$(rb_prompt) in $(directory_name) $(git_dirty)$(need_push)› '
+export PROMPT=$'\n$(py_prompt) $(rb_prompt) in $(directory_name) $(git_dirty)$(need_push)› '
 set_prompt () {
-  export RPROMPT="%{$fg_bold[cyan]%}$(todo)%{$reset_color%}"
+  export RPROMPT="%{$fg_bold[cyan]%}%{$reset_color%}"
 }
 
 precmd() {
