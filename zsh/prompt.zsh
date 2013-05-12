@@ -54,7 +54,7 @@ py_prompt() {
 rb_prompt() {
   if (( $+commands[rbenv] ))
   then
-    echo "%{$fg[red]%}rb:%{$reset_color%}%{$fg_bold[red]%}$(rbenv gemset active | awk '{print $1}')@$(rbenv version | awk '{print $1}')%{$reset_color%}%{$fg[red]%}/%{$reset_color%}"
+    echo "%{$fg[red]%}rb:%{$reset_color%}%{$fg_bold[red]%}$(rbenv gemset active 2>/dev/null | awk '{print $1}')@$(rbenv version | awk '{print $1}')%{$reset_color%}%{$fg[red]%}/%{$reset_color%}"
 	else
 	  echo ""
   fi
